@@ -1,18 +1,11 @@
-import React from 'react'
+import React from "react"
 
-class Header extends React.Component {
-  render() {
-    return (
-      <header>
+const Header = ({links}) =>
+    <header>
         <h1>React SPA</h1>
         <nav>
-          <a href="#">link</a>
-          <a href="#">link</a>
-          <a href="#">link</a>
+            { links.map( (link,i)=> <a key={i} href={`/${link}`}>{link}</a> ) }
         </nav>
-      </header>
-    )
-  }
-}
+    </header>
 
 export default Header
