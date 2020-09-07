@@ -1,7 +1,7 @@
 import React from 'react'
 import ListadoUsuarios from './ListadoUsuarios'
 
-const Usuarios = ({ nombre, apellido, usuarios, manejarElSubmit, manejarCambioNombre, manejarCambioApellido, borrarUsuario, editarUsuario }) => (
+const Usuarios = ({ nombre, apellido, editar, cancelUpdate, indice, usuarios, manejarElSubmit, manejarCambioNombre, manejarCambioApellido, borrarUsuario, editarUsuario }) => (
   <>
     <form onSubmit={manejarElSubmit}>
       <div>
@@ -10,9 +10,10 @@ const Usuarios = ({ nombre, apellido, usuarios, manejarElSubmit, manejarCambioNo
       <div>
         <input onChange={manejarCambioApellido} type="text" placeholder="Apellido" value={apellido} />
       </div>
-      <button>Guardar</button>
+      <button>{!editar ? 'Guardar' : 'Actualizar'}</button> {editar ? <button onClick={cancelUpdate}>Cancel</button> : null}
+      {console.log(editar)}
     </form>
-    <ListadoUsuarios usuarios={usuarios} borrarUsuario={borrarUsuario} editarUsuario={editarUsuario} />
+    <ListadoUsuarios usuarios={usuarios} indice={indice} editar={editar} borrarUsuario={borrarUsuario} editarUsuario={editarUsuario} />
   </>
 )
 

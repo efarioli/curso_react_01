@@ -13,7 +13,8 @@ class App extends React.Component {
       form: {
         nombre: '',
         apellido: '',
-        editar: -1
+        indice: 0,
+        editar: false
       },
       usuarios: []
     }
@@ -29,12 +30,20 @@ class App extends React.Component {
       usuarios: nuevos_usuarios
     })
   }
+
+  resetearForm = () => {
+    this.setState({
+      form: {
+        nombre: '',
+        apellido: '',
+        editar: false
+      }
+    })
+  }
   editarUsuario = i => {
     let usuario = this.state.usuarios[i]
-
     // let start = this.state.usuarios.slice(0, i)
     // let end = this.state.usuarios.slice(i + 1)
-
     // let nuevos_usuarios = [...start, ...end]
 
     this.setState({
@@ -42,34 +51,21 @@ class App extends React.Component {
       form: {
         nombre: usuario.nombre,
         apellido: usuario.apellido,
-        editar: i
+        indice: i,
+        editar: true
       }
     })
   }
 
   manejarElSubmit = e => {
     e.preventDefault()
-
-    //Como no puedo modificar el state, hago una copia. De esta manera mantengo todos los posibles usuarios que haya hasta el momento
-    //let copia = this.state.usuarios.slice(0)
-    //Creo mi nuevo usuario
-    /* let usuario = {
-            nombre : this.state.form.nombre,
-            apellido : this.state.form.apellido
-        }  */
-    //Pongo el nuevo usuario al final del array
-    //copia.push(usuario)
     if (!this.state.form.editar) {
+      const { indice, editar, ...nuevoUsuario } = this.state.form
       this.setState({
-        usuarios: [...this.state.usuarios, this.state.form],
-        form: {
-          nombre: '',
-          apellido: '',
-          editar: -1
-        }
+        usuarios: [...this.state.usuarios, nuevoUsuario]
       })
     } else {
-      let i = this.state.form.editar
+      let i = this.state.form.indice
       let start = this.state.usuarios.slice(0, i)
       let end = this.state.usuarios.slice(i + 1)
 
@@ -84,6 +80,7 @@ class App extends React.Component {
         usuarios: nuevos_usuarios
       })
     }
+    this.resetearForm()
   }
 
   manejarCambioAtributo = (atributo, e) => {
@@ -106,6 +103,9 @@ class App extends React.Component {
       }
     })
   }
+  cancelUpdate = () => {
+    this.resetearForm()
+  }
 
   aumentarContador = () => {
     this.setState({ contador: this.state.contador + 1 })
@@ -125,7 +125,7 @@ class App extends React.Component {
       <>
         <Header links={links} />
         <Main contador={contador} aumentarContador={this.aumentarContador} restarContador={this.restarContador} resetearContador={this.resetearContador} />
-        <Usuarios nombre={form.nombre} apellido={form.apellido} usuarios={usuarios} manejarElSubmit={this.manejarElSubmit} manejarCambioNombre={this.manejarCambioAtributo.bind(this, 'nombre')} manejarCambioApellido={this.manejarCambioAtributo.bind(this, 'apellido')} borrarUsuario={this.borrarUsuario} editarUsuario={this.editarUsuario} />
+        <Usuarios cancelUpdate={this.cancelUpdate} nombre={form.nombre} indice={form.indice} editar={form.editar} apellido={form.apellido} usuarios={usuarios} manejarElSubmit={this.manejarElSubmit} manejarCambioNombre={this.manejarCambioAtributo.bind(this, 'nombre')} manejarCambioApellido={this.manejarCambioAtributo.bind(this, 'apellido')} borrarUsuario={this.borrarUsuario} editarUsuario={this.editarUsuario} />
         <Footer />
       </>
     )
